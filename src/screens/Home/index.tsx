@@ -1,4 +1,4 @@
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { homeStyles } from './style';
 import Todo from '../../components/Todo';
 
@@ -10,7 +10,18 @@ export default function Home() {
   }
 
   const handleDeleteTodo = () => {
-    console.log("Delete")
+    Alert.alert("Remove", "Do you want to remove this task?",
+      [
+        {
+          text: "No",
+          style: "cancel"
+        },
+        {
+          text: "Yes",
+          onPress: () => Alert.alert("Removed", "You removed this taks from your list.")
+        },
+      ]
+    )
   }
 
   return (
@@ -20,11 +31,20 @@ export default function Home() {
         <TextInput style={homeStyles.input} placeholder='What you want to do?' placeholderTextColor={"#5E5E5E"} />
         <TouchableOpacity style={homeStyles.createButton} onPress={handleAddTodo}><Text style={homeStyles.createButtonText}>+</Text></TouchableOpacity>
       </View>
-      <ScrollView style={homeStyles.todoList} showsVerticalScrollIndicator={false}>
-        {todos.length !== 0 ? (todos.map((todo, index) => (
-          <Todo todo={todo} onRemove={handleDeleteTodo} key={todo.description + index} />
-        ))) : <Text style={homeStyles.emptyTodosText}>You don't have any task to do!</Text>}
-      </ScrollView>
+      <FlatList
+        style={homeStyles.todoList}
+        data={todos}
+        keyExtractor={item => item.description}
+        renderItem={({ item }) => (
+          <Todo
+            key={item.description}
+            todo={{ ...item }}
+            onRemove={handleDeleteTodo}
+          />
+        )}
+        ListEmptyComponent={() => (<Text style={homeStyles.emptyTodosText}>You don't have any task to do!</Text>)}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   )
 }
