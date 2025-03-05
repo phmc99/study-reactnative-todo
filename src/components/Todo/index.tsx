@@ -1,11 +1,9 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import { todoStyles } from "./styles";
+import { TodoType } from "../../types";
 
 interface ITodo {
-  todo: {
-    isCompleted: boolean,
-    description: string
-  },
+  todo: TodoType,
   onRemove: () => void
 }
 
