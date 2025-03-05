@@ -17,10 +17,19 @@ export const todoStyles = StyleSheet.create({
     borderRadius: "100%",
     marginHorizontal: 10,
   },
+  checkboxCompleted: {
+    borderColor: '#8284FA',
+    backgroundColor: '#8284FA',
+  },
   text: {
     color: "white",
     flex: 1,
     fontSize: 14,
+  },
+  textCompleted: {
+    color: "#747474",
+    textDecorationLine: "line-through",
+    textDecorationStyle: "solid"
   },
   deleteButton: {
     width: 56,

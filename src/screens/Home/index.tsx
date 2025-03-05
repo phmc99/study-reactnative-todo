@@ -4,9 +4,11 @@ import Todo from '../../components/Todo';
 import { TodoType } from '../../types';
 import { useState } from 'react';
 import uuid from 'react-native-uuid';
+import TodoStatus from '../../components/TodoStatus';
 
 export default function Home() {
   const [todos, setTodos] = useState<TodoType[]>([])
+  const [todosCompleted, setTodosCompleted] = useState<TodoType[]>([])
   const [description, setDescription] = useState("")
 
   const handleAddTodo = () => {
@@ -50,9 +52,22 @@ export default function Home() {
     )
   }
 
+  const handleCompleteTodo = (id: string) => {
+    const todo = todos.find(todo => todo.id === id)
+    const todoIndex = todos.findIndex(todo => todo.id === id)
+
+    if (!todo || todoIndex === -1) return
+
+    todo.isCompleted = true
+    const newList = [...todos]
+    newList.splice(todoIndex, 1, todo)
+
+    setTodos(newList.sort((a, b) => Number(a.isCompleted) - Number(b.isCompleted)))
+  }
+
+
   return (
     <View style={homeStyles.container}>
-      <Text>To Do</Text>
       <View style={homeStyles.flex}>
         <TextInput
           style={homeStyles.input}
@@ -63,6 +78,9 @@ export default function Home() {
         />
         <TouchableOpacity style={homeStyles.createButton} onPress={handleAddTodo}><Text style={homeStyles.createButtonText}>+</Text></TouchableOpacity>
       </View>
+
+      <TodoStatus todoQuantity={todos.filter(({ isCompleted }) => !isCompleted).length} completedQuantity={todos.filter(({ isCompleted }) => isCompleted).length} />
+
       <FlatList
         style={homeStyles.todoList}
         data={todos}
@@ -72,6 +90,7 @@ export default function Home() {
             key={item.description}
             todo={{ ...item }}
             onRemove={() => handleDeleteTodo(item.id)}
+            onComplete={() => handleCompleteTodo(item.id)}
           />
         )}
         ListEmptyComponent={() => (<Text style={homeStyles.emptyTodosText}>You don't have any task to do!</Text>)}

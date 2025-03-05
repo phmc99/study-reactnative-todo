@@ -46,6 +46,11 @@ export const homeStyles = StyleSheet.create({
     fontSize: 24,
     color: "#747474",
     fontWeight: "bold",
-    marginHorizontal: "auto"
-  },
+    marginHorizontal: "auto",
+    borderTopWidth: 1,
+    borderColor: "#333333",
+    width: "100%",
+    textAlign: "center",
+    paddingTop: 20
+  }
 });
